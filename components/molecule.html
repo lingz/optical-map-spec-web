@@ -1,0 +1,72 @@
+<link href='../bower_components/polymer/polymer.html' rel="import">
+<link href='../bower_components/paper-button/paper-button.html' rel="import">
+
+<polymer-element name="om-molecule" attributes="cuts">
+  <template>
+    <style>
+      :host {
+        height: 50px;
+        width: 620px;
+        position: relative;
+      }
+      #molecule {
+        width: 500px;
+        height: 100%;
+        margin-right: 20px;
+        background-color: grey;
+      }
+      paper-button {
+        box-sizing: border-box;
+        width: 100px;
+        height: 100%;
+        margin: 0px;
+      }
+      #container {
+        width: 100%;
+        height: 100%;
+      }
+      .cut {
+        position: absolute;
+        top: 0;
+        width: 0px;
+        height: 100%;
+        border-style: solid;
+        border-color: orange;
+        border-width: 0px 1px 0px 0px;
+      }
+      paper-button {
+        background-color: green;
+      }
+      paper-button.flipped {
+        background-color: blue;
+      }
+    </style>
+
+    <div id="container" layout horizontal>
+      <div id="molecule">
+        <template repeat="{{cut in shownCuts}}" layout horizontal>
+          <div class="cut" style="left: {{cut * 500}}px ">
+          </div>
+        </template>
+      </div>
+      <paper-button class="{{flipped ? 'flipped' : ''}}" layout horizontal center center-justified on-click="{{flip}}">
+        {{flipped ? "Unflip" : "Flip"}}
+      </paper-button>
+    </div>
+
+  </template>
+  <script>
+    Polymer("om-molecule", {
+      ready: function() {
+        this.shownCuts = this.cuts;
+        this.flipped = false;
+        this.flippedCuts = _.map(this.cuts, function(cut) {return 1 - cut;})
+      },
+      flip: function() {
+        console.log("Yo")
+        this.flipped = !this.flipped;
+        this.shownCuts = this.flipped ? this.flippedCuts : this.cuts;
+      }
+    });
+  </script>
+</polymer-element>
