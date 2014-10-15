@@ -19,6 +19,7 @@
       </h1>
       <paper-input id="moleculeInput" multiline maxRows="10" label="Enter Molecule Cuts Here" on-keyup={{handleChange}}
         inputValue={{moleculesString}}
+        maxRows="10"
         floatingLabel="true">
       </paper-input>
       <template repeat="{{cuts in molecules}}" layout vertical>
