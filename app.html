@@ -7,15 +7,6 @@
 <polymer-element name="optical-mapping-visualizer">
   <template>
     <style>
-      :host {
-        height: 100%;
-        width: 100%;
-      }
-      #header {
-      }
-      #main {
-        height: 100%
-      }
       om-molecule {
         margin-top: 15px;
         margin-bottom: 15px;
@@ -23,14 +14,12 @@
     </style>
 
     <div id="main" layout vertical center center-justified>
-      <div id="header" layout horizontal center center-justified class='{{started ? "" : "tall"}}'>
+      <h1 id="header" layout horizontal center center-justified>
         Optical Mapping Visualizer
-      </div>
+      </h1>
       <paper-input id="moleculeInput" multiline maxRows="10" label="Enter Molecule Cuts Here" on-keyup={{handleChange}}
         inputValue={{moleculesString}}
-        floatingLabel="true"
-        invalid="{{isInvalid}}"
-        error="Invalid Input" >
+        floatingLabel="true">
       </paper-input>
       <template repeat="{{cuts in molecules}}" layout vertical>
         <om-molecule cuts={{cuts}}>
@@ -46,21 +35,20 @@
       ready: function() {
         this.molecules = [];
         this.moleculesString = "";
-        this.isInvalid = false;
       },
       handleChange: function() {
         // check if valid
         var moleculesStrings = this.moleculesString.split("\n");
-        var hasInvalid = _.find(moleculesStrings, function(molecule) {
-          return !MOLECULE_REGEX.exec(molecule);
+        var cleanMolecules = _.filter(moleculesStrings, function(molecule) {
+          return MOLECULE_REGEX.exec(molecule);
         });
-        if (hasInvalid) {
-          this.isInvalid = true;
+
+        if (cleanMolecules.length ===  0) {
           return;
         }
 
         // all molecules are valid
-        this.molecules = _.map(moleculesStrings, function(molecule) {
+        this.molecules = _.map(cleanMolecules, function(molecule) {
           return _.map(molecule.split(" "), function(cut) {
             return parseFloat(cut);
           });
